@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   BottomNavigation,
   PaperProvider,
@@ -12,6 +12,8 @@ import Homepage from "./pages/Homepage";
 import Calendarpage from "./pages/Calendarpage";
 
 import CreateModule from "./pages/CreateModule";
+import Module from "./pages/Module";
+import CreateQuiz from "./pages/CreateQuiz";
 
 const Stack = createStackNavigator();
 
@@ -38,7 +40,20 @@ export default function App() {
   };
 
   const [todos, setTodos] = useState([]);
-  const [modules, setModules] = useState([]);
+  const [modules, setModules] = useState([
+    {
+      title: "diff 1",
+      difficulty: "difficult",
+    },
+    {
+      title: "easy 1",
+      difficulty: "easy",
+    },
+    {
+      title: "medium 1",
+      difficulty: "medium",
+    },
+  ]);
   const [index, setIndex] = useState(0);
   const [selectedDate, setSelectedDate] = useState(
     new Date().toISOString().split("T")[0]
@@ -49,10 +64,9 @@ export default function App() {
       try {
         const jsonTasks = await AsyncStorage.getItem("tasks");
         setTodos(
-          jsonTasks.length > 0 && Array.isArray(jsonTasks) // Check if returned value is an array and not empty
-            ? JSON.parse(jsonTasks) // If true, populate todos with jsonTasks
+          jsonTasks.length > 0 && Array.isArray(jsonTasks)
+            ? JSON.parse(jsonTasks)
             : [
-                // else populate with test data
                 {
                   id: 0,
                   value: "test 1",
@@ -109,31 +123,33 @@ export default function App() {
       selectedDate={selectedDate}
       setSelectedDate={setSelectedDate}
       saveTasksToStorage={saveTasksToStorage}
-    ></Homepage>
+    />
   );
 
   const TasksRoute = () => (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="TaskPage">
-        <Stack.Screen name="TaskPage" options={{ headerShown: false }}>
-          {(props) => (
-            <TaskPage {...props} modules={modules} setModules={setModules} />
-          )}
-        </Stack.Screen>
-        <Stack.Screen name="CreateModule" options={{ headerShown: false }}>
-          {(props) => (
-            <CreateModule
-              {...props}
-              modules={modules}
-              setModules={setModules}
-            />
-          )}
-        </Stack.Screen>
-      </Stack.Navigator>
-    </NavigationContainer>
+    <Stack.Navigator initialRouteName="TaskPage">
+      <Stack.Screen name="TaskPage" options={{ headerShown: false }}>
+        {(props) => (
+          <TaskPage {...props} modules={modules} setModules={setModules} />
+        )}
+      </Stack.Screen>
+      <Stack.Screen name="CreateModule" options={{ headerShown: false }}>
+        {(props) => (
+          <CreateModule {...props} modules={modules} setModules={setModules} />
+        )}
+      </Stack.Screen>
+      <Stack.Screen name="Module" options={{ headerShown: true }}>
+        {(props) => (
+          <Module {...props} setModules={setModules} modules={modules} />
+        )}
+      </Stack.Screen>
+      <Stack.Screen name="CreateQuiz" options={{ headerShown: true }}>
+        {(props) => <CreateQuiz {...props} />}
+      </Stack.Screen>
+    </Stack.Navigator>
   );
 
-  const CalendarRoute = () => <Calendarpage></Calendarpage>;
+  const CalendarRoute = () => <Calendarpage />;
 
   const renderScene = BottomNavigation.SceneMap({
     home: HomeRoute,
@@ -143,11 +159,13 @@ export default function App() {
 
   return (
     <PaperProvider theme={theme}>
-      <BottomNavigation
-        navigationState={{ index, routes }}
-        onIndexChange={setIndex}
-        renderScene={renderScene}
-      />
+      <NavigationContainer>
+        <BottomNavigation
+          navigationState={{ index, routes }}
+          onIndexChange={setIndex}
+          renderScene={renderScene}
+        />
+      </NavigationContainer>
     </PaperProvider>
   );
 }

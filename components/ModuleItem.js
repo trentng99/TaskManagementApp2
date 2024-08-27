@@ -1,8 +1,11 @@
 import React from "react";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, TouchableOpacity } from "react-native";
 import { Text } from "react-native-paper";
+import { useNavigation } from "@react-navigation/native"; // Import the useNavigation hook
 
-export default function ModuleItem({ item, index }) {
+export default function ModuleItem({ item, moduleIndex }) {
+  const navigation = useNavigation(); // Initialize navigation
+
   const getColorBasedOnDifficulty = (difficulty) => {
     switch (difficulty) {
       case "easy":
@@ -16,8 +19,13 @@ export default function ModuleItem({ item, index }) {
     }
   };
 
+  // Function to handle the click and navigate to the new route
+  const handlePress = () => {
+    navigation.navigate("Module", { moduleIndex });
+  };
+
   return (
-    <View style={styles.moduleItem}>
+    <TouchableOpacity onPress={handlePress} style={styles.moduleItem}>
       <View style={styles.textContainer}>
         <View
           style={[
@@ -30,7 +38,7 @@ export default function ModuleItem({ item, index }) {
         />
         <Text style={styles.title}>{item.title}</Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 }
 
