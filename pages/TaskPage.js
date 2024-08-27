@@ -1,21 +1,26 @@
 import React, { useState } from "react";
-import { View, StyleSheet, TextInput, FlatList } from "react-native";
+import { View, StyleSheet, FlatList } from "react-native";
 import { globalStyles } from "../common/style";
 import { FAB, Portal, Text } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
+import ModuleItem from "../components/ModuleItem";
 
-const TaskPage = ({ modules, setModules }) => {
+const TaskPage = ({ modules }) => {
   const [state, setState] = useState({ open: false });
-  const [textState, setTextState] = useState("");
 
   const onStateChange = ({ open }) => setState({ open });
 
   const { open } = state;
   const navigation = useNavigation();
   return (
-    <View>
-      <Text style={globalStyles.heading}>Task management</Text>
-      {JSON.stringify(modules)}
+    <View style={globalStyles.container}>
+      <Text style={globalStyles.heading}>Module management</Text>
+      <FlatList
+        data={modules}
+        renderItem={({ item, index }) => (
+          <ModuleItem item={item} index={index} />
+        )}
+      />
       <Portal>
         <FAB.Group
           backdropColor="transparent"
