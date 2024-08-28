@@ -118,10 +118,8 @@ export default function App() {
 
   const HomeRoute = () => (
     <Homepage
-      todos={todos}
-      setTodos={setTodos}
-      selectedDate={selectedDate}
-      setSelectedDate={setSelectedDate}
+      modules={modules}
+      setModules={setModules}
       saveTasksToStorage={saveTasksToStorage}
     />
   );

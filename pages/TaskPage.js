@@ -2,12 +2,11 @@ import React, { useState } from "react";
 import { View, StyleSheet, FlatList } from "react-native";
 import { globalStyles } from "../common/style";
 import { FAB, Text } from "react-native-paper";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import ModuleItem from "../components/ModuleItem";
 
 const TaskPage = ({ modules }) => {
   const [state, setState] = useState({ open: false });
-  const route = useRoute(); // Get the current route
 
   const onStateChange = ({ open }) => setState({ open });
 

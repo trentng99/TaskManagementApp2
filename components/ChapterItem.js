@@ -1,9 +1,15 @@
 import React from "react";
-import { View, StyleSheet, TouchableOpacity, Button } from "react-native";
-import { Text } from "react-native-paper";
+import { View, StyleSheet, Button } from "react-native";
+import { Checkbox, Text } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 
-export default function ChapterItem({ item, moduleIndex, chapterIndex }) {
+export default function ChapterItem({
+  item,
+  moduleIndex,
+  chapterIndex,
+  modules,
+  setModules,
+}) {
   const navigation = useNavigation();
   console.log({ moduleIndex, chapterIndex });
 
@@ -14,20 +20,67 @@ export default function ChapterItem({ item, moduleIndex, chapterIndex }) {
     });
   };
 
+  const toggleCheckbox = (learningItemIndex) => {
+    const updatedModules = modules.map((module, modIndex) => {
+      if (modIndex === moduleIndex) {
+        return {
+          ...module,
+          chapters: module.chapters.map((chapter, chapIndex) => {
+            if (chapIndex === chapterIndex) {
+              return {
+                ...chapter,
+                learningItems: chapter.learningItems.map(
+                  (learningItem, index) =>
+                    index === learningItemIndex
+                      ? { ...learningItem, complete: !learningItem.complete }
+                      : learningItem
+                ),
+              };
+            }
+            return chapter;
+          }),
+        };
+      }
+      return module;
+    });
+
+    setModules(updatedModules);
+  };
+
+  // Check if all learning items are completed
+  const allItemsCompleted =
+    item.learningItems.length > 0 &&
+    item.learningItems.every((learningItem) => learningItem.complete);
+
   return (
     <View style={styles.chapterItem}>
       <View style={styles.textContainer}>
-        <Text style={styles.title}>{item.title}</Text>
+        <Text
+          style={[styles.title, allItemsCompleted && styles.completedTitle]}>
+          {item.title} ({item.learningItems.length})
+        </Text>
       </View>
 
       {/* Render the learningItems below the title */}
       <View style={styles.learningItemsContainer}>
         {item.learningItems.map((learningItem, idx) => (
           <View key={idx} style={styles.learningItem}>
-            <Text style={styles.learningItemText}>{learningItem.title}</Text>
-            <Text style={styles.learningItemDetails}>
-              {learningItem.type} - {learningItem.dueDate}
-            </Text>
+            <View style={styles.learningItemTextContainer}>
+              <Text
+                style={[
+                  styles.learningItemText,
+                  learningItem.complete && styles.completedText,
+                ]}>
+                {learningItem.title}
+              </Text>
+              <Text style={styles.learningItemDetails}>
+                {learningItem.type} - {learningItem.dueDate}
+              </Text>
+            </View>
+            <Checkbox
+              status={learningItem.complete ? "checked" : "unchecked"}
+              onPress={() => toggleCheckbox(idx)}
+            />
           </View>
         ))}
       </View>
@@ -59,22 +112,37 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: "#000",
   },
+  completedTitle: {
+    textDecorationLine: "line-through",
+    color: "#888", // Optional: make the color lighter when completed
+  },
   addButton: {
     marginTop: 8,
   },
   learningItemsContainer: {
     marginTop: 16,
+    display: "flex",
   },
   learningItem: {
-    backgroundColor: "#D4D4D4", // Slightly darker background color
+    flexDirection: "row", // Align items in a row
+    alignItems: "center", // Center items vertically
+    justifyContent: "space-between", // Space between text and checkbox
+    backgroundColor: "#D4D4D4",
     paddingHorizontal: 16,
     paddingVertical: 16,
     borderRadius: 12,
     marginVertical: 8,
   },
+  learningItemTextContainer: {
+    flex: 1, // Take up remaining space
+  },
   learningItemText: {
     fontSize: 16,
     color: "#000",
+  },
+  completedText: {
+    textDecorationLine: "line-through",
+    color: "#888", // Optional: make the color lighter when completed
   },
   learningItemDetails: {
     fontSize: 14,

@@ -99,6 +99,8 @@ const Module = ({ modules, setModules }) => {
             item={item}
             moduleIndex={moduleIndex}
             chapterIndex={index}
+            modules={modules}
+            setModules={setModules}
           />
         )}
         keyExtractor={(item, index) => index.toString()}

@@ -20,6 +20,7 @@ export default function CreateQuiz({ route }) {
       type,
       title,
       dueDate,
+      complete: false,
     };
     if (moment(dueDate, "YYYY-MM-DD", true).isValid()) {
       navigation.navigate("Module", {
