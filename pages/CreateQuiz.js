@@ -64,11 +64,10 @@ export default function CreateQuiz({ route }) {
         value={dueDate}
         onChangeText={setDueDate}
         placeholder="YYYY-MM-DD"
+        style={{ marginBottom: 24 }}
       />
       {error ? <Text style={{ color: "red" }}>{error}</Text> : null}
-      <Button mode="contained" onPress={handleSave} style={styles.saveButton}>
-        Save
-      </Button>
+      <Button mode="contained" onPress={handleSave} title="Save" />
     </View>
   );
 }

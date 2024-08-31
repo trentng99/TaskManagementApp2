@@ -4,6 +4,7 @@ export const globalStyles = StyleSheet.create({
   heading: {
     fontWeight: "bold",
     fontSize: 40,
+    marginBottom: 24,
   },
   container: {
     flex: 1,

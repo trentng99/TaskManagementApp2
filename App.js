@@ -40,24 +40,8 @@ export default function App() {
   };
 
   const [todos, setTodos] = useState([]);
-  const [modules, setModules] = useState([
-    {
-      title: "diff 1",
-      difficulty: "difficult",
-    },
-    {
-      title: "easy 1",
-      difficulty: "easy",
-    },
-    {
-      title: "medium 1",
-      difficulty: "medium",
-    },
-  ]);
+  const [modules, setModules] = useState([]);
   const [index, setIndex] = useState(0);
-  const [selectedDate, setSelectedDate] = useState(
-    new Date().toISOString().split("T")[0]
-  );
 
   useEffect(() => {
     const loadTasksFromStorage = async () => {

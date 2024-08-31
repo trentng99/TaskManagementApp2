@@ -2,10 +2,12 @@ import React, { useState } from "react";
 import { View, StyleSheet, Button } from "react-native";
 import { Text, TextInput } from "react-native-paper";
 import RNPickerSelect from "react-native-picker-select";
+import { useNavigation } from "@react-navigation/native";
 
 export default function CreateModule({ modules, setModules }) {
   const [title, setTitle] = useState("");
   const [difficulty, setDifficulty] = useState("difficult");
+  const { navigate } = useNavigation();
 
   return (
     <View style={styles.container}>
@@ -46,7 +48,8 @@ export default function CreateModule({ modules, setModules }) {
             const newModule = { title, difficulty };
             setModules([...modules, newModule]);
             setTitle(""); // Reset the title input
-            setDifficulty("difficult"); // Reset the difficulty picker
+            setDifficulty(""); // Reset the difficulty picker
+            navigate("TaskPage");
           }}
           title="Submit"
         />
@@ -67,6 +70,7 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
   },
   input: {
+    marginTop: 24,
     marginBottom: 20,
     backgroundColor: "white",
   },

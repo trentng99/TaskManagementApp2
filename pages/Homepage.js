@@ -4,52 +4,60 @@ import { globalStyles } from "../common/style";
 import { Text } from "react-native-paper";
 import TaskItem from "../components/TaskItem";
 
-let id = 1;
-
 export default function Homepage({ modules, setModules }) {
-  const [dateVisible, setDateVisible] = useState(false);
-  console.log({ modules });
-
   // Flatten learning items from all modules with additional context
-  const allLearningItems = modules.flatMap((module, moduleIndex) =>
+  const allLearningItems = modules?.flatMap((module, moduleIndex) =>
     module?.chapters?.flatMap((chapter, chapterIndex) =>
       chapter.learningItems.map((item) => ({
         ...item,
+        moduleIndex,
+        chapterIndex,
+        itemIndex: chapter.learningItems.indexOf(item),
         moduleTitle: module.title,
         chapterTitle: chapter.title,
-        chapterIndex: chapterIndex + 1, // Add chapter index for sorting/display
       }))
     )
   );
 
-  // // Filter and sort learning items based on the selected date
-  // const filteredItems = allLearningItems
-  //   .filter((item) => {
-  //     const dueDate = new Date(item.dueDate);
-  //     return dueDate.getTime() >= selectedDate.getTime();
-  //   })
-  //   .sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+  // Sort the items by dueDate (assuming dueDate is in a format that can be compared)
+  const sortedLearningItems = allLearningItems?.sort(
+    (a, b) => new Date(a.dueDate) - new Date(b.dueDate)
+  );
 
-  console.log({ allLearningItems });
+  const handleComplete = (moduleIndex, chapterIndex, itemIndex) => {
+    // Create a deep copy of the modules array to avoid direct state mutation
+    const updatedModules = [...modules];
+
+    // Access the specific item and toggle the 'complete' status
+    updatedModules[moduleIndex].chapters[chapterIndex].learningItems[
+      itemIndex
+    ].complete =
+      !updatedModules[moduleIndex].chapters[chapterIndex].learningItems[
+        itemIndex
+      ].complete;
+
+    // Update the state with the modified modules array
+    setModules(updatedModules);
+  };
 
   return (
     <View style={globalStyles.container}>
       <Text style={globalStyles.heading}>Hi, here's this week's tasks</Text>
-      {allLearningItems.length > 0 ? (
+      {sortedLearningItems?.length > 0 ? (
         <FlatList
-          data={allLearningItems}
-          renderItem={({ item }) => (
+          data={sortedLearningItems}
+          renderItem={({ item, index }) => (
             <TaskItem
               item={item}
-              moduleTitle={item?.moduleTitle}
-              handleComplete={() => {}}
-              showDialog={() => {}}
-              handleDelete={() => {}}
+              itemIndex={index}
+              handleComplete={handleComplete}
             />
           )}
         />
       ) : (
-        <View>hello</View>
+        <Text style={{ marginTop: 24 }}>
+          No tasks available, try going to the task page to add some tasks
+        </Text>
       )}
     </View>
   );

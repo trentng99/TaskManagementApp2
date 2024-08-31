@@ -13,6 +13,8 @@ const TaskPage = ({ modules }) => {
   const { open } = state;
   const navigation = useNavigation();
 
+  console.log(modules);
+
   return (
     <View style={globalStyles.container}>
       <Text style={globalStyles.heading}>Module management</Text>

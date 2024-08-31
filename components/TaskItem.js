@@ -4,17 +4,17 @@ import { Checkbox, Text } from "react-native-paper";
 import { formatDate } from "../common/formatDate";
 import { useTheme } from "react-native-paper";
 
-const TaskItem = ({ item, handleComplete }) => {
+const TaskItem = ({ item, itemIndex, handleComplete }) => {
   const [isChecked, setIsChecked] = useState(item?.complete);
   const theme = useTheme();
 
   const toggleCheckbox = () => {
     setIsChecked(!isChecked);
-    handleComplete(item.id);
+    handleComplete(item.moduleIndex, item.chapterIndex, item.itemIndex);
   };
-  console.log({ item });
+
   if (!item) {
-    return <View>nothing</View>;
+    return <View></View>;
   }
 
   return (
@@ -29,7 +29,7 @@ const TaskItem = ({ item, handleComplete }) => {
           </Text>{" "}
           •{" "}
           <Text style={{ color: theme.colors.lightGreen }}>
-            CHAPTER {item.chapterIndex}
+            CHAPTER {item.chapterIndex + 1}
           </Text>{" "}
           • <Text>{formatDate(item.dueDate)}</Text>
         </Text>
