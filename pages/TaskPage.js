@@ -32,11 +32,6 @@ const TaskPage = ({ modules }) => {
         icon="plus"
         actions={[
           {
-            icon: "checkbox-marked-circle-outline",
-            label: "Add task",
-            onPress: () => console.log("Pressed star"),
-          },
-          {
             icon: "grid",
             label: "Add module",
             onPress: () => navigation.navigate("CreateModule"),

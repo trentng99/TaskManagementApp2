@@ -15,6 +15,77 @@ import CreateModule from "./pages/CreateModule";
 import Module from "./pages/Module";
 import CreateQuiz from "./pages/CreateQuiz";
 
+const defaultModules = [
+  {
+    title: "dwqdwqdwqdwq",
+    difficulty: "difficult",
+    chapters: [
+      {
+        title: "Chapter 1",
+        learningItems: [
+          {
+            type: "tutorial",
+            title: "dwqdwqdwq",
+            dueDate: "2024-08-31",
+            complete: false,
+          },
+        ],
+      },
+      {
+        title: "Chapter 2",
+        learningItems: [
+          {
+            type: "quiz",
+            title: "dwqdwq",
+            dueDate: "2024-08-31",
+            complete: false,
+          },
+          {
+            type: "tutorial",
+            title: "dwqdwqdwqd",
+            dueDate: "2024-08-31",
+            complete: false,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    title: "ANother module",
+    difficulty: "easy",
+    chapters: [
+      {
+        title: "Chapter 1",
+        learningItems: [
+          {
+            type: "tutorial",
+            title: "dwqdwqdwq",
+            dueDate: "2024-08-31",
+            complete: false,
+          },
+        ],
+      },
+      {
+        title: "Chapter 2",
+        learningItems: [
+          {
+            type: "quiz",
+            title: "dwqdwqd",
+            dueDate: "2024-08-31",
+            complete: false,
+          },
+          {
+            type: "quiz",
+            title: "dwqdwqdqw",
+            dueDate: "2024-08-31",
+            complete: false,
+          },
+        ],
+      },
+    ],
+  },
+];
+
 const Stack = createStackNavigator();
 
 export default function App() {
@@ -40,7 +111,7 @@ export default function App() {
   };
 
   const [todos, setTodos] = useState([]);
-  const [modules, setModules] = useState([]);
+  const [modules, setModules] = useState(defaultModules);
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
@@ -131,7 +202,7 @@ export default function App() {
     </Stack.Navigator>
   );
 
-  const CalendarRoute = () => <Calendarpage />;
+  const CalendarRoute = () => <Calendarpage modules={modules} />;
 
   const renderScene = BottomNavigation.SceneMap({
     home: HomeRoute,

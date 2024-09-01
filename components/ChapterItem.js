@@ -1,6 +1,6 @@
 import React from "react";
 import { View, StyleSheet, Button } from "react-native";
-import { Checkbox, Text } from "react-native-paper";
+import { Checkbox, IconButton, Text } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 
 export default function ChapterItem({
@@ -18,6 +18,30 @@ export default function ChapterItem({
       moduleIndex,
       chapterIndex,
     });
+  };
+
+  const handleDeleteLearningItem = (learningItemIndex) => {
+    const updatedModules = modules.map((module, modIndex) => {
+      if (modIndex === moduleIndex) {
+        return {
+          ...module,
+          chapters: module.chapters.map((chapter, chapIndex) => {
+            if (chapIndex === chapterIndex) {
+              return {
+                ...chapter,
+                learningItems: chapter.learningItems.filter(
+                  (_, index) => index !== learningItemIndex
+                ),
+              };
+            }
+            return chapter;
+          }),
+        };
+      }
+      return module;
+    });
+
+    setModules(updatedModules);
   };
 
   const toggleCheckbox = (learningItemIndex) => {
@@ -64,7 +88,7 @@ export default function ChapterItem({
       {/* Render the learningItems below the title */}
       <View style={styles.learningItemsContainer}>
         {item.learningItems.map((learningItem, idx) => (
-          <View key={idx} style={styles.learningItem}>
+          <View style={styles.learningItem} key={idx}>
             <View style={styles.learningItemTextContainer}>
               <Text
                 style={[
@@ -80,6 +104,11 @@ export default function ChapterItem({
             <Checkbox
               status={learningItem.complete ? "checked" : "unchecked"}
               onPress={() => toggleCheckbox(idx)}
+            />
+            <IconButton
+              icon="delete"
+              color="red"
+              onPress={() => handleDeleteLearningItem(idx)}
             />
           </View>
         ))}
