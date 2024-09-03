@@ -14,36 +14,37 @@ import Calendarpage from "./pages/Calendarpage";
 import CreateModule from "./pages/CreateModule";
 import Module from "./pages/Module";
 import CreateQuiz from "./pages/CreateQuiz";
+import EditLearningItem from "./pages/EditLearningItem";
 
 const defaultModules = [
   {
-    title: "dwqdwqdwqdwq",
+    title: "Date strucutres and Algorithm",
     difficulty: "difficult",
     chapters: [
       {
-        title: "Chapter 1",
+        title: "Understanding Algorithms",
         learningItems: [
           {
             type: "tutorial",
-            title: "dwqdwqdwq",
-            dueDate: "2024-08-31",
+            title: "Introduction to Sorting Algorithms",
+            dueDate: "2024-09-02", //
             complete: false,
           },
         ],
       },
       {
-        title: "Chapter 2",
+        title: "Data Structures Deep Dive",
         learningItems: [
           {
             type: "quiz",
-            title: "dwqdwq",
-            dueDate: "2024-08-31",
+            title: "Data Structures Fundamentals",
+            dueDate: "2024-09-04",
             complete: false,
           },
           {
             type: "tutorial",
-            title: "dwqdwqdwqd",
-            dueDate: "2024-08-31",
+            title: "Advanced Tree Structures",
+            dueDate: "2024-09-06",
             complete: false,
           },
         ],
@@ -51,33 +52,33 @@ const defaultModules = [
     ],
   },
   {
-    title: "ANother module",
+    title: "Intro to Web Development",
     difficulty: "easy",
     chapters: [
       {
-        title: "Chapter 1",
+        title: "Basics of HTML & CSS",
         learningItems: [
           {
             type: "tutorial",
-            title: "dwqdwqdwq",
-            dueDate: "2024-08-31",
+            title: "Getting Started with HTML",
+            dueDate: "2024-09-03",
             complete: false,
           },
         ],
       },
       {
-        title: "Chapter 2",
+        title: "JavaScript Essentials",
         learningItems: [
           {
             type: "quiz",
-            title: "dwqdwqd",
-            dueDate: "2024-08-31",
+            title: "JavaScript Basics",
+            dueDate: "2024-09-05",
             complete: false,
           },
           {
             type: "quiz",
-            title: "dwqdwqdqw",
-            dueDate: "2024-08-31",
+            title: "JavaScript DOM Manipulation",
+            dueDate: "2024-09-07",
             complete: false,
           },
         ],
@@ -198,6 +199,9 @@ export default function App() {
       </Stack.Screen>
       <Stack.Screen name="CreateQuiz" options={{ headerShown: true }}>
         {(props) => <CreateQuiz {...props} />}
+      </Stack.Screen>
+      <Stack.Screen name="EditLearningItem" options={{ headerShown: true }}>
+        {(props) => <EditLearningItem {...props} />}
       </Stack.Screen>
     </Stack.Navigator>
   );

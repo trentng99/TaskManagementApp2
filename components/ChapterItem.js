@@ -71,6 +71,15 @@ export default function ChapterItem({
     setModules(updatedModules);
   };
 
+  const handleEditLearningItem = (learningItemIndex) => {
+    navigation.navigate("EditLearningItem", {
+      moduleIndex,
+      chapterIndex,
+      learningItemIndex,
+      learningItem: item.learningItems[learningItemIndex], // Pass the existing data
+    });
+  };
+
   // Check if all learning items are completed
   const allItemsCompleted =
     item.learningItems.length > 0 &&
@@ -106,8 +115,11 @@ export default function ChapterItem({
               onPress={() => toggleCheckbox(idx)}
             />
             <IconButton
+              icon="pencil"
+              onPress={() => handleEditLearningItem(idx)}
+            />
+            <IconButton
               icon="delete"
-              color="red"
               onPress={() => handleDeleteLearningItem(idx)}
             />
           </View>

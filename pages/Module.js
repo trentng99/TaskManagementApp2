@@ -20,11 +20,8 @@ const Module = ({ modules, setModules }) => {
     setChapters(selectedModule.chapters);
   }, [moduleIndex, modules]);
 
+  // useEffect for creating new Learning items
   useEffect(() => {
-    console.log("New Learning Item:", newLearningItem);
-    console.log("Chapter Index:", chapterIndex);
-    console.log("Chapters Before Update:", chapters);
-
     if (newLearningItem !== undefined && chapterIndex >= 0) {
       const updatedChapters = [...chapters];
 
@@ -37,54 +34,74 @@ const Module = ({ modules, setModules }) => {
           ],
         };
 
-        console.log("Updated Chapters After Learning Item:", updatedChapters);
         setChapters(updatedChapters);
 
         const updatedModules = modules.map((mod, index) =>
           index === moduleIndex ? { ...mod, chapters: updatedChapters } : mod
         );
-        console.log("Updated Modules After Learning Item:", updatedModules);
         setModules(updatedModules);
 
-        navigation.setParams({ ...route.params, newLearningItem: undefined });
+        // Reset the newLearningItem parameter
+        navigation.setParams({ newLearningItem: undefined });
+      }
+    }
+  }, [newLearningItem, chapterIndex, moduleIndex]);
+
+  // useEffect for editing currenct learning items
+  useEffect(() => {
+    const { updatedLearningItem, learningItemIndex } = route.params || {};
+
+    if (
+      updatedLearningItem !== undefined &&
+      learningItemIndex >= 0 &&
+      chapterIndex >= 0
+    ) {
+      const updatedChapters = [...chapters];
+
+      if (chapterIndex < updatedChapters.length) {
+        const learningItems = [...updatedChapters[chapterIndex].learningItems];
+        learningItems[learningItemIndex] = updatedLearningItem;
+
+        updatedChapters[chapterIndex] = {
+          ...updatedChapters[chapterIndex],
+          learningItems,
+        };
+
+        setChapters(updatedChapters);
+
+        const updatedModules = modules.map((mod, index) =>
+          index === moduleIndex ? { ...mod, chapters: updatedChapters } : mod
+        );
+
+        setModules(updatedModules);
+
+        // Reset the updatedLearningItem parameter
+        navigation.setParams({
+          updatedLearningItem: undefined,
+          learningItemIndex: undefined,
+        });
       }
     }
   }, [
-    newLearningItem,
+    route.params?.updatedLearningItem,
+    route.params?.learningItemIndex,
     chapterIndex,
     moduleIndex,
-    chapters,
-    modules,
-    navigation,
-    route.params,
   ]);
 
   const addChapter = () => {
-    if (chapters?.length) {
-      const newChapter = {
-        title: `Chapter ${chapters?.length + 1}`,
-        learningItems: [],
-      };
-      const updatedChapters = [...chapters, newChapter];
-      setChapters(updatedChapters);
-      const updatedModules = modules.map((mod, index) =>
-        index === moduleIndex ? { ...mod, chapters: updatedChapters } : mod
-      );
+    const newChapter = {
+      title: `Chapter ${chapters.length + 1}`,
+      learningItems: [],
+    };
+    const updatedChapters = [...chapters, newChapter];
+    setChapters(updatedChapters);
 
-      setModules(updatedModules);
-    } else {
-      const newChapter = {
-        title: `Chapter 1`,
-        learningItems: [],
-      };
-      const updatedChapters = [newChapter];
-      setChapters(updatedChapters);
-      const updatedModules = modules.map((mod, index) =>
-        index === moduleIndex ? { ...mod, chapters: updatedChapters } : mod
-      );
+    const updatedModules = modules.map((mod, index) =>
+      index === moduleIndex ? { ...mod, chapters: updatedChapters } : mod
+    );
 
-      setModules(updatedModules);
-    }
+    setModules(updatedModules);
   };
 
   const selectedModule = modules[moduleIndex] || { chapters: [] };
